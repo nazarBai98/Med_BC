@@ -1,0 +1,20 @@
+# AL Language
+.vscode/
+*.app
+*.alpackages/
+*.vsix
+*.code-workspace
+*.symbols.nupkg
+*.snupkg
+
+# User-specific settings
+*.user
+*.env
+
+# System files
+Thumbs.db
+.DS_Store
+
+# Logs and temp
+*.log
+*.tmp
