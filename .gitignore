@@ -1,5 +1,5 @@
 # AL Language
-.vscode/
+.alcache/
 *.app
 *.alpackages/
 *.vsix
