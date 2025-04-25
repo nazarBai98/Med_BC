@@ -51,5 +51,34 @@ tableextension 50000 Patient extends Customer
         {
             Caption = 'Anamnesis';
         }
+        field(50009; Age; Integer)
+        {
+            Caption = 'Anamnesis';
+        }
+        field(50010; "Body Weight"; Decimal)
+        {
+            Caption = 'Body Weight';
+            MinValue = 0;
+            trigger OnValidate()
+            begin
+                if Hight <> 0 then
+                    BMI := Power("Body Weight" / Hight, 2)
+            end;
+        }
+        field(50011; "Hight"; Decimal)
+        {
+            Caption = 'Hight';
+            MinValue = 0;
+            trigger OnValidate()
+            begin
+                if Hight <> 0 then
+                    BMI := Power("Body Weight" / Hight, 2)
+            end;
+        }
+        field(50012; BMI; Decimal)
+        {
+            Caption = 'BMI';
+            Editable = false;
+        }
     }
 }

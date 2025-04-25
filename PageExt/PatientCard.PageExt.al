@@ -113,11 +113,7 @@ pageextension 50001 "Patient Card" extends "Customer Card"
 
     actions
     {
-        modify("&Customer")
-        {
-            Visible = false;
-        }
-        addfirst(navigation)
+        addfirst(Action82)
         {
             group("AI functions")
             {
@@ -144,7 +140,33 @@ pageextension 50001 "Patient Card" extends "Customer Card"
                         end;
                     end;
                 }
+                action("Authofill Patient Data")
+                {
+                    Caption = 'Authofill Patient Data';
+                    Image = AuthorizeCreditCard;
+                    ApplicationArea = All;
+                    trigger OnAction()
+                    var
+                        AIFunc: Codeunit "AI Functions Manager";
+                        SugestesDiagnosesTmp: Record "Secondary Diagnoses" temporary;
+                        SugestedDiagnosesPage: Page "Sugested Diagnoses";
+                    begin
+                        if Anamnesis <> '' then begin
+                            AIFunc.GetSuggestedDiagnoses(Anamnesis, Rec."No.", SugestesDiagnosesTmp);
+                            if not SugestesDiagnosesTmp.IsEmpty() then begin
+                                SugestedDiagnosesPage.SetRecords(SugestesDiagnosesTmp);
+                                Commit();
+                                SugestedDiagnosesPage.RunModal();
+                                CurrPage.Update(true);
+                            end;
+                        end;
+                    end;
+                }
             }
+        }
+        modify("&Customer")
+        {
+            Visible = false;
         }
     }
 

@@ -8,4 +8,7 @@ enum 50001 Sex
     value(1; Female)
     {
     }
+    value(2; Other)
+    {
+    }
 }
