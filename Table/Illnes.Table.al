@@ -23,21 +23,21 @@ table 50000 Illnes
         }
     }
     
-    trigger OnInsert()
-    var
-        TreatmentSetup: Record "Treatment Setup";
-        NoSeries: Codeunit "No. Series";
-    begin
-        TreatmentSetup.Get();
+    // trigger OnInsert()
+    // var
+    //     TreatmentSetup: Record "Treatment Setup";
+    //     NoSeries: Codeunit "No. Series";
+    // begin
+    //     TreatmentSetup.Get();
 
-        if TreatmentSetup."Use No. Series Patt For Diag" then
-            if TreatmentSetup."Diagnosis Code No. Series" <> '' then begin
-                Rec.Code := NoSeries.GetNextNo(TreatmentSetup."Diagnosis Code No. Series");
-            end
-            else
-                Error(NoSeriesErr);
-    end;
+    //     if TreatmentSetup."Use No. Series Patt For Diag" then
+    //         if TreatmentSetup."Diagnosis Code No. Series" <> '' then begin
+    //             Rec.Code := NoSeries.GetNextNo(TreatmentSetup."Diagnosis Code No. Series");
+    //         end
+    //         else
+    //             Error(NoSeriesErr);
+    // end;
     
-    var
-        NoSeriesErr: Label 'Autofilling of Primary key is ON bud No Series is not selected.';
+    // var
+    //     NoSeriesErr: Label 'Autofilling of Primary key is ON bud No Series is not selected.';
 }

@@ -47,5 +47,9 @@ tableextension 50000 Patient extends Customer
         {
             Caption = 'Personal Document ID';
         }
+        field(50008; Anamnesis; Blob)
+        {
+            Caption = 'Anamnesis';
+        }
     }
 }

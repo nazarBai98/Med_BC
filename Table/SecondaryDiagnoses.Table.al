@@ -16,6 +16,7 @@ table 50008 "Secondary Diagnoses"
         field(3; "Line No."; Integer)
         {
             Caption = 'Line No.';
+            AutoIncrement = true;
         }
         field(4; "Date Of Diagnosis"; Date)
         {

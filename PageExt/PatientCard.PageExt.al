@@ -61,6 +61,21 @@ pageextension 50001 "Patient Card" extends "Customer Card"
         }
         addafter(General)
         {
+            group(Anamnesis)
+            {
+                Caption = 'Anamnesis';
+                field(Recipe; Anamnesis)
+                {
+                    Caption = 'Anamnesis';
+                    MultiLine = true;
+                    ExtendedDatatype = RichContent;
+                    ApplicationArea = All;
+                    trigger OnValidate()
+                    begin
+                        SaveAnamnesis();
+                    end;
+                }
+            }
             group(Diagnosis)
             {
                 field("Main Diagnosis Code"; Rec."Main Illnes Code")
@@ -96,6 +111,66 @@ pageextension 50001 "Patient Card" extends "Customer Card"
         }
     }
 
+    actions
+    {
+        modify("&Customer")
+        {
+            Visible = false;
+        }
+        addfirst(navigation)
+        {
+            group("AI functions")
+            {
+                Caption = 'AI Functions';
+                action("Sugest Diagnoses")
+                {
+                    Caption = 'Sugest Diagnoses from anamnesis.';
+                    Image = Suggest;
+                    ApplicationArea = All;
+                    trigger OnAction()
+                    var
+                        AIFunc: Codeunit "AI Functions Manager";
+                        SugestesDiagnosesTmp: Record "Secondary Diagnoses" temporary;
+                        SugestedDiagnosesPage: Page "Sugested Diagnoses";
+                    begin
+                        if Anamnesis <> '' then begin
+                            AIFunc.GetSuggestedDiagnoses(Anamnesis, Rec."No.", SugestesDiagnosesTmp);
+                            if not SugestesDiagnosesTmp.IsEmpty() then begin
+                                SugestedDiagnosesPage.SetRecords(SugestesDiagnosesTmp);
+                                Commit();
+                                SugestedDiagnosesPage.RunModal();
+                                CurrPage.Update(true);
+                            end;
+                        end;
+                    end;
+                }
+            }
+        }
+    }
+
+    trigger OnOpenPage()
+    begin
+        PopulateRichTextField()
+    end;
+
+    local procedure PopulateRichTextField()
+    var
+        InStream: InStream;
+    begin
+        Rec.CalcFields(Anamnesis);
+        Rec.Anamnesis.CreateInStream(InStream, TextEncoding::UTF8);
+        InStream.Read(Anamnesis);
+    end;
+
+    internal procedure SaveAnamnesis()
+    var
+        RecipeOutStream: OutStream;
+    begin
+        Rec.Anamnesis.CreateOutStream(RecipeOutStream, TextEncoding::UTF8);
+        RecipeOutStream.Write(Anamnesis);
+    end;
+
     var
         SecondaryDiagnosis: Page "Secodary Diagnoses";
+        Anamnesis: Text;
 }
